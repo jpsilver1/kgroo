@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -6,30 +8,19 @@ class MarketIndex(BaseModel):
     change: float
 
 
-class PopularStock(BaseModel):
-    rank: int
+class StockSummary(BaseModel):
+    rank: Optional[int] = None
     name: str
     code: str
-    price: int
+    price: float
     change: float
-    cap: str
+    cap: Optional[str] = None
+    sector: Optional[str] = None
 
 
-class StockSearchResult(BaseModel):
-    name: str
-    code: str
-    price: int
-    change: float
-
-
-class StockDetail(BaseModel):
-    name: str
-    code: str
-    price: int
-    change: float
-    cap: str
-    week_52_high: int
-    week_52_low: int
+class StockDetail(StockSummary):
+    week52High: float
+    week52Low: float
     volume: int
 
 
@@ -37,36 +28,21 @@ class Holding(BaseModel):
     code: str
     name: str
     quantity: float = Field(ge=0)
-    average_price: float = Field(ge=0)
+    averagePrice: float = Field(ge=0)
 
 
-class PortfolioPayload(BaseModel):
-    user_id: str
-    holdings: list[Holding]
+class PortfolioRequest(BaseModel):
+    user_id: str = "demo"
+    holdings: list[Holding] = []
 
 
-class PortfolioResponse(BaseModel):
-    user_id: str
-    holdings: list[Holding]
+class AdviceRequest(BaseModel):
+    investorType: str = "balanced"
+    totalAssets: float = 0
+    stockRatio: float = 0
+    cashRatio: float = 0
 
 
-class AssetAllocation(BaseModel):
-    cash: int = Field(ge=0, le=100)
-    stock: int = Field(ge=0, le=100)
-    gold: int = Field(ge=0, le=100)
-    dollar: int = Field(ge=0, le=100)
-    other: int = Field(ge=0, le=100)
-
-
-class AIAdviceRequest(BaseModel):
-    age: int = Field(ge=0, le=120)
-    job: str
-    monthly_income: int = Field(ge=0)
-    investment_style: str
-    current_assets: AssetAllocation
-
-
-class AIAdviceResponse(BaseModel):
-    advice: str
-    recommended_portfolio: AssetAllocation
-    reason: str
+class AdviceResponse(BaseModel):
+    summary: str
+    actions: list[str]

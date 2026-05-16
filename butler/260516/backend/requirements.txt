@@ -1,8 +1,8 @@
 fastapi
-uvicorn
-finance-datareader
-supabase
+uvicorn[standard]
 python-dotenv
-pydantic
-httpx
+finance-datareader
+pandas
+requests
 anthropic
+supabase
