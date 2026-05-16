@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+finance-datareader
+supabase
+python-dotenv
+pydantic
+httpx
+anthropic
